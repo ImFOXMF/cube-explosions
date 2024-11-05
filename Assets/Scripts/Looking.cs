@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Looking : MonoBehaviour
 {
-    private readonly string MouseX = "Mouse X";
-    private readonly string MouseY = "Mouse Y";
+    private readonly string _mouseX = "Mouse X";
+    private readonly string _mouseY = "Mouse Y";
 
     [SerializeField] private float _speed;
     [SerializeField] private Transform _camera;
@@ -13,7 +13,7 @@ public class Looking : MonoBehaviour
 
     private void Update()
     {
-        _camera.Rotate(_speed * -Input.GetAxis(MouseY) * Time.deltaTime * Vector3.right);
-        _body.Rotate(_speed * Input.GetAxis(MouseX) * Time.deltaTime * Vector3.up);
+        _camera.Rotate(_speed * -Input.GetAxis(_mouseY) * Time.deltaTime * Vector3.right);
+        _body.Rotate(_speed * Input.GetAxis(_mouseX) * Time.deltaTime * Vector3.up);
     }
 }
