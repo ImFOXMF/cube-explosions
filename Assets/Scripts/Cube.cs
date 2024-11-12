@@ -1,18 +1,16 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Cube : MonoBehaviour
 {
     [SerializeField] private int _divideChance = 100;
     [SerializeField] private int _decreasingProbability = 2;
 
-    private Spawner _spawner;
-    private Exploder _exploder;
+    public event Action<Cube> OnClicked;
 
     private void Start()
     {
-        _spawner = FindObjectOfType<Spawner>();
-        _exploder = FindObjectOfType<Exploder>();
-
         SetRandomColor();
     }
 
@@ -20,8 +18,7 @@ public class Cube : MonoBehaviour
     {
         if (Random.Range(0, 100) < _divideChance)
         {
-            var newObjects = _spawner.SpawnCubes(this, _divideChance, _decreasingProbability);
-            _exploder.Explode(newObjects, transform.position);
+            OnClicked?.Invoke(this);
         }
 
         Destroy(gameObject);
@@ -41,4 +38,8 @@ public class Cube : MonoBehaviour
     {
         _divideChance = newChance;
     }
+    
+    public int GetDivideChance() => _divideChance;
+    
+    public int GetDecreasingProbability() => _decreasingProbability;
 }
