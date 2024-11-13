@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    private readonly string Horizontal = "Horizontal";
-    private readonly string Vertical = "Vertical";
+    const string Horizontal = "Horizontal";
+    const string Vertical = "Vertical";
 
     [SerializeField] private float _speed;
 

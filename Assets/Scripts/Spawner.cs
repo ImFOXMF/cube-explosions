@@ -21,18 +21,20 @@ public class Spawner : MonoBehaviour
 
     private void SubscribeToCube(Cube cube)
     {
-        cube.OnClicked += HandleCubeClicked;
+        cube.Clicked += OnCubeClicked;
     }
 
-    private void HandleCubeClicked(Cube clickedCube)
+    private void OnCubeClicked(Cube clickedCube)
     {
         var newCubes = SpawnCubes(clickedCube);
         _exploder.Explode(newCubes, clickedCube.transform.position);
+        
+        clickedCube.Clicked -= OnCubeClicked;
     }
 
-    private List<GameObject> SpawnCubes(Cube originalCube)
+    private List<Cube> SpawnCubes(Cube originalCube)
     {
-        List<GameObject> newObjects = new List<GameObject>();
+        List<Cube> newCubes = new List<Cube>();
 
         int randomValue = Random.Range(_minCountSpawn, _maxCountSpawn + 1);
 
@@ -40,12 +42,12 @@ public class Spawner : MonoBehaviour
         {
             Cube newCube = Instantiate(originalCube, originalCube.transform.position, originalCube.transform.rotation);
             newCube.transform.localScale = originalCube.transform.localScale / _decreasingObjectSize;
-            newCube.SetDivideChance(Mathf.Max(1, originalCube.GetDivideChance() / originalCube.GetDecreasingProbability()));
+            newCube.SetDivideChance(Mathf.Max(1, originalCube.DivideChance / originalCube.DecreasingProbability));
 
             SubscribeToCube(newCube);
-            newObjects.Add(newCube.gameObject);
+            newCubes.Add(newCube);
         }
 
-        return newObjects;
+        return newCubes;
     }
 }

@@ -2,12 +2,20 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(Renderer))]
 public class Cube : MonoBehaviour
 {
-    [SerializeField] private int _divideChance = 100;
-    [SerializeField] private int _decreasingProbability = 2;
+    [field: SerializeField] public int DivideChance {get; private set;} = 100;
+    [field: SerializeField] public int DecreasingProbability {get; private set;} = 2;
+    
+    private Renderer _renderer;
 
-    public event Action<Cube> OnClicked;
+    public event Action<Cube> Clicked;
+
+    private void Awake()
+    {
+        _renderer = GetComponent<Renderer>();
+    }
 
     private void Start()
     {
@@ -16,9 +24,9 @@ public class Cube : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
-        if (Random.Range(0, 100) < _divideChance)
+        if (Random.Range(0, 100) < DivideChance)
         {
-            OnClicked?.Invoke(this);
+            Clicked?.Invoke(this);
         }
 
         Destroy(gameObject);
@@ -26,20 +34,11 @@ public class Cube : MonoBehaviour
 
     private void SetRandomColor()
     {
-        Renderer renderer = GetComponent<Renderer>();
-
-        if (renderer != null)
-        {
-            renderer.material.color = Random.ColorHSV();
-        }
+        _renderer.material.color = Random.ColorHSV();
     }
 
     public void SetDivideChance(int newChance)
     {
-        _divideChance = newChance;
+        DivideChance = newChance;
     }
-    
-    public int GetDivideChance() => _divideChance;
-    
-    public int GetDecreasingProbability() => _decreasingProbability;
 }
