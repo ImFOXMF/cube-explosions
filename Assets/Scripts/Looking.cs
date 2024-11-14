@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class Looking : MonoBehaviour
 {
-    private readonly string _mouseX = "Mouse X";
-    private readonly string _mouseY = "Mouse Y";
-
     [SerializeField] private float _speed;
     [SerializeField] private Transform _camera;
     [SerializeField] private Transform _body;
+    
+    private readonly string _mouseX = "Mouse X";
+    private readonly string _mouseY = "Mouse Y";
 
     private void Update()
     {

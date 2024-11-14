@@ -5,13 +5,13 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(Renderer))]
 public class Cube : MonoBehaviour
 {
-    [field: SerializeField] public int DivideChance {get; private set;} = 100;
-    [field: SerializeField] public int DecreasingProbability {get; private set;} = 2;
-    
     private Renderer _renderer;
 
     public event Action<Cube> Clicked;
 
+    [field: SerializeField] public int DivideChance {get; private set;} = 100;
+    [field: SerializeField] public int DecreasingProbability {get; private set;} = 2;
+    
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
