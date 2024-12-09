@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Exploder : MonoBehaviour
 {
-    [field: SerializeField] public float ExplosionRadius = 100f;
+    [field: SerializeField] public float ExplosionRadius = 15f;
     [SerializeField] private float _explosionForce = 700f;
 
     public void Explode(List<Cube> affectedObjects, Vector3 explosionCenter)
@@ -21,15 +21,16 @@ public class Exploder : MonoBehaviour
 
     public void ExplodeNotDevided(List<Rigidbody> affectedObjects, Vector3 explosionCenter, float koeffFromSize)
     {
-        foreach (Rigidbody explodableObject in affectedObjects)
+        foreach (Rigidbody affectedOject in affectedObjects)
         {
-            float distance = Vector3.Distance(explodableObject.transform.position, transform.position);
-            float koeffFromDistance = distance / ExplosionRadius;
+            float distance = Vector3.Distance(affectedOject.transform.position, transform.position);
+            float koeffFromDistance = ExplosionRadius / distance;
 
             float finalExplosionForce = _explosionForce * koeffFromDistance;
             float finalExplosionRadius = ExplosionRadius * koeffFromSize;
-
-            explodableObject.AddExplosionForce(finalExplosionForce, explosionCenter, finalExplosionRadius);
+            
+            affectedOject.AddExplosionForce(finalExplosionForce, explosionCenter,
+                finalExplosionRadius);
         }
     }
 }
