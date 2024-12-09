@@ -6,11 +6,15 @@ using Random = UnityEngine.Random;
 public class Cube : MonoBehaviour
 {
     private Renderer _renderer;
+    private int _minRandom = 0;
+    private int _maxRandom = 100;
 
-    public event Action<Cube> Clicked;
+    public event Action<Cube> ClickedAndDevided;
+    public event Action<Cube> ClickedAndNotDevided;
 
     [field: SerializeField] public int DivideChance {get; private set;} = 100;
     [field: SerializeField] public int DecreasingProbability {get; private set;} = 2;
+    [field: SerializeField] public int BaseSize {get; private set;} = 1;
     
     private void Awake()
     {
@@ -24,9 +28,13 @@ public class Cube : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
-        if (Random.Range(0, 100) < DivideChance)
+        if (Random.Range(_minRandom, _maxRandom) < DivideChance)
         {
-            Clicked?.Invoke(this);
+            ClickedAndDevided?.Invoke(this);
+        }
+        else
+        {
+            ClickedAndNotDevided?.Invoke(this);
         }
 
         Destroy(gameObject);

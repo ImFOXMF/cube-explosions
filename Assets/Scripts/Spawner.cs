@@ -15,22 +15,46 @@ public class Spawner : MonoBehaviour
         if (_initialCubes != null)
             foreach (var cube in _initialCubes)
             {
-                SubscribeToCube(cube);   
+                SubscribeToCube(cube);
             }
     }
 
     private void SubscribeToCube(Cube cube)
     {
-        cube.Clicked += OnCubeClicked;
+        cube.ClickedAndDevided += OnCubeClickedAndDevided;
+        cube.ClickedAndNotDevided += OnCubeClickedAndNotDevided;
     }
 
-    private void OnCubeClicked(Cube clickedCube)
+    private void OnCubeClickedAndDevided(Cube clickedCube)
     {
         var newCubes = SpawnCubes(clickedCube);
         _exploder.Explode(newCubes, clickedCube.transform.position);
-        
-        clickedCube.Clicked -= OnCubeClicked;
+
+        clickedCube.ClickedAndDevided -= OnCubeClickedAndDevided;
     }
+
+    private void OnCubeClickedAndNotDevided(Cube clickedCube)
+    {
+        float koeffFromSize = clickedCube.BaseSize/clickedCube.transform.localScale.x;
+        
+        var affectedCubes = GetExplodableObjects(clickedCube);
+        _exploder.ExplodeNotDevided(affectedCubes, clickedCube.transform.position, koeffFromSize);
+
+        clickedCube.ClickedAndNotDevided -= OnCubeClickedAndNotDevided;
+    }
+    
+    private List<Rigidbody> GetExplodableObjects(Cube clickedCube)
+        {
+            Collider[] hits = Physics.OverlapSphere(clickedCube.transform.position, _exploder.ExplosionRadius);
+    
+            List<Rigidbody> cubes = new();
+    
+            foreach (Collider hit in hits)
+                if (hit.attachedRigidbody != null)
+                    cubes.Add(hit.attachedRigidbody);
+            
+            return cubes;
+        }
 
     private List<Cube> SpawnCubes(Cube originalCube)
     {
