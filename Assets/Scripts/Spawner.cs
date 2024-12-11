@@ -27,7 +27,8 @@ public class Spawner : MonoBehaviour
 
     private void OnCubeClickedAndDevided(Cube clickedCube)
     {
-        var newCubes = SpawnCubes(clickedCube);
+       List<Rigidbody> newCubes = SpawnCubes(clickedCube);
+       
         _exploder.Explode(newCubes, clickedCube.transform.position);
 
         clickedCube.ClickedAndDevided -= OnCubeClickedAndDevided;
@@ -37,7 +38,7 @@ public class Spawner : MonoBehaviour
     {
         float koeffFromSize = clickedCube.BaseSize/clickedCube.transform.localScale.x;
         
-        var affectedCubes = GetExplodableObjects(clickedCube);
+        List<Rigidbody> affectedCubes = GetExplodableObjects(clickedCube);
         _exploder.ExplodeNotDevided(affectedCubes, clickedCube.transform.position, koeffFromSize);
 
         clickedCube.ClickedAndNotDevided -= OnCubeClickedAndNotDevided;
@@ -56,9 +57,9 @@ public class Spawner : MonoBehaviour
             return cubes;
         }
 
-    private List<Cube> SpawnCubes(Cube originalCube)
+    private List<Rigidbody> SpawnCubes(Cube originalCube)
     {
-        List<Cube> newCubes = new List<Cube>();
+        List<Rigidbody> newRigidbodies = new List<Rigidbody>();
 
         int randomValue = Random.Range(_minCountSpawn, _maxCountSpawn + 1);
 
@@ -69,9 +70,9 @@ public class Spawner : MonoBehaviour
             newCube.SetDivideChance(Mathf.Max(1, originalCube.DivideChance / originalCube.DecreasingProbability));
 
             SubscribeToCube(newCube);
-            newCubes.Add(newCube);
+            newRigidbodies.Add(newCube.GetComponent<Rigidbody>());
         }
 
-        return newCubes;
+        return newRigidbodies;
     }
 }

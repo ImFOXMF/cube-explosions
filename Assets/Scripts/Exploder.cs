@@ -6,15 +6,13 @@ public class Exploder : MonoBehaviour
     [field: SerializeField] public float ExplosionRadius = 15f;
     [SerializeField] private float _explosionForce = 700f;
 
-    public void Explode(List<Cube> affectedObjects, Vector3 explosionCenter)
+    public void Explode(List<Rigidbody> affectedObjects, Vector3 explosionCenter)
     {
-        foreach (Cube affectedObject in affectedObjects)
+        foreach (Rigidbody affectedObject in affectedObjects)
         {
-            Rigidbody objectRigidbody = affectedObject.GetComponent<Rigidbody>();
-
-            if (objectRigidbody != null)
+            if (affectedObject != null)
             {
-                objectRigidbody.AddExplosionForce(_explosionForce, explosionCenter, ExplosionRadius);
+                affectedObject.AddExplosionForce(_explosionForce, explosionCenter, ExplosionRadius);
             }
         }
     }
